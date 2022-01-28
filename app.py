@@ -79,13 +79,15 @@ def make_stock_info_table(df):
 
 def convert_str_column(in_df):
     ''' Convert the string coloumn back into a array of float '''
-    in_df = re.sub("[\[\]']",'',in_df)
+    in_df = re.sub("[\[\]']",'',str(in_df)) 
+    in_df = re.sub('((?<=,)|^)(?=,|$)', '0', in_df)
     return np.array(in_df.split(',')).astype(np.float)
 
 
 def convert_str_column_str(in_df):
     ''' Convert the string coloumn back into a array of str '''
-    in_df = re.sub("[\[\]']",'',in_df)
+    in_df = re.sub("[\[\]']",'',str(in_df)) 
+    in_df = re.sub('((?<=,)|^)(?=,|$)', '0', in_df)
     return np.array(in_df.split(','))
 
 
@@ -152,20 +154,19 @@ def get_ohlc_data_web(in_ticker):
 
 app = dash.Dash(__name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}])
 app.title = "Stock Analysis Report"
-
 server = app.server
 
 
 def serve_layout():
 
     # Read in the daily stock data
-    stock_info_url = 'https://raw.githubusercontent.com/jeffreyrdcs/stock-vcpscreener/main/daily_selected_stock_info.csv'
+    stock_info_url = '../stock_vcpscreener/daily_selected_stock_info.csv'
     global df
     df = pd.read_csv(stock_info_url)
     df = df.set_index('Date')
 
     # Read in the corresponding info dataset of the most recent day
-    selected_info_url = f'https://raw.githubusercontent.com/jeffreyrdcs/stock-vcpscreener/main/output/selected_stock_{df.index[-1]}.csv'
+    selected_info_url = f'../stock_vcpscreener/output/selected_stock_{df.index[-1]}.csv'
     df_info = pd.read_csv(selected_info_url)
     df_info = df_info.drop(df_info.columns[0], axis=1)
 
@@ -441,7 +442,7 @@ def display_page(in_check_date):
     # print(len(dff_histodata[to_plot]))
 
     # Read in the corresponding info dataset
-    selected_info_url = f'https://raw.githubusercontent.com/jeffreyrdcs/stock-vcpscreener/main/output/selected_stock_{in_check_date}.csv'
+    selected_info_url = f'../stock_vcpscreener/output/selected_stock_{in_check_date}.csv'
     dff_info = pd.read_csv(selected_info_url)
     dff_info = dff_info.drop(dff_info.columns[0], axis=1)
 
@@ -692,5 +693,5 @@ def display_stock_graph4(in_ticker, in_date):
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server(debug=True)  #debug=True
-
+ 
+    app.run_server(host="127.0.0.1", port="8080")  #debug=True
