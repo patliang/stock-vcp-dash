@@ -239,7 +239,7 @@ def serve_layout():
                 The screener calculates various market breadth indicators and selects stocks on a daily basis based on the criteria. \
                 To rank the selected stocks, a rating score is computed using past performances, similar to the IBD RS rating. \
                 The rating and rank of the stock can be found in the summary table.''',
-                style={"color": "#ffffff"},
+                style={"": "#ffffff"},
                 className="row",
                 ),
             ],
@@ -459,11 +459,18 @@ def display_page(in_check_date):
     container = "US Stock Market Analysis Report for {}".format(in_check_date)  #, len(dff['Breadth Percentage'].values[0]
 
     # Update stock rating plot
-    fig = px.bar(
+    print(f'Viewing report for {in_check_date} debug 1')
+    try:
+        fig = px.bar(
                 y=dff['RS rating of Tickers'].iloc[0][0:50], color_continuous_scale=px.colors.sequential.Greens_r[1:7],
-                color=np.linspace(0,255,50),
+                color=np.linspace(0,255,len(dff_info)),
                 x=dff['Tickers that fit the conditions'].iloc[0][0:50],
                 orientation='v')
+    except Exception as e:
+        print(e)
+        pass    	
+                
+    print(f'Viewing report for {in_check_date} debug 2')
     fig.update_coloraxes(showscale=False)
     fig.update_yaxes(categoryorder="total ascending")
     fig.update_layout(showlegend=False, autosize=False, hovermode="x",
@@ -694,4 +701,4 @@ def display_stock_graph4(in_ticker, in_date):
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
  
-    app.run_server(host="127.0.0.1", port="8080")  #debug=True
+    app.run_server(debug=True, host="127.0.0.1", port="8080")  #debug=True
