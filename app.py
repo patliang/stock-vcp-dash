@@ -133,17 +133,19 @@ def get_ohlc_data(in_ticker):
     return tdf
 
 
-def get_ohlc_data_web(in_ticker):
+def get_ohlc_data_web(in_ticker, in_date):
     '''
     Fetch OHLC data from yahoo finance, format the dataFrame and compute SMA
     '''
     yf.pdr_override()
-    curr_day = datetime.utcnow() - timedelta(hours=5)       # UTC -5, i.e. US NY timezone
+    #curr_day = datetime.utcnow() - timedelta(hours=5)       # UTC -5, i.e. US NY timezone
+    curr_day = datetime.strptime(in_date, '%Y-%m-%d')
 
     tdf = pdr.get_data_yahoo(in_ticker.strip(),
                             start=curr_day.date()-timedelta(days=365),
-                            end=curr_day.date(), threads=False)    # a year of data
-    # tdf['Date'] = pd.to_datetime(tdf['Date'])
+                            end=curr_day.date()+timedelta(days=365), threads=False)    # a year of data
+    #tdf['Date'] = pd.to_datetime(tdf['Date'])
+    #print(tdf['Date'])
     # tdf.set_index('Date', inplace=True)
     tdf['SMA_20'] = tdf['Adj Close'].rolling(window=20).mean()
     tdf['SMA_50'] = tdf['Adj Close'].rolling(window=50).mean()
@@ -540,7 +542,7 @@ def display_stock_graph1(in_ticker, in_date):
     '''
     Currently OHLC data is fetched online
     '''
-    df = get_ohlc_data_web(in_ticker)
+    df = get_ohlc_data_web(in_ticker, in_date)
     # df = get_ohlc_data(in_ticker)
 
     fig = go.Figure(data=[go.Ohlc(x=df.index,
@@ -582,7 +584,7 @@ def display_stock_graph2(in_ticker, in_date):
     '''
     Currently OHLC data is fetched online
     '''
-    df = get_ohlc_data_web(in_ticker)
+    df = get_ohlc_data_web(in_ticker, in_date)
     # df = get_ohlc_data(in_ticker)
 
     fig = go.Figure(data=[go.Ohlc(x=df.index,
@@ -624,7 +626,7 @@ def display_stock_graph3(in_ticker, in_date):
     '''
     Currently OHLC data is fetched online
     '''
-    df = get_ohlc_data_web(in_ticker)
+    df = get_ohlc_data_web(in_ticker, in_date)
     # df = get_ohlc_data(in_ticker)
 
     fig = go.Figure(data=[go.Ohlc(x=df.index,
@@ -666,7 +668,7 @@ def display_stock_graph4(in_ticker, in_date):
     '''
     Currently OHLC data is fetched online
     '''
-    df = get_ohlc_data_web(in_ticker)
+    df = get_ohlc_data_web(in_ticker, in_date)
     # df = get_ohlc_data(in_ticker)
 
     fig = go.Figure(data=[go.Ohlc(x=df.index,
