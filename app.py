@@ -463,7 +463,7 @@ def display_page(in_check_date):
     try:
         fig = px.bar(
                 y=dff['RS rating of Tickers'].iloc[0][0:50], color_continuous_scale=px.colors.sequential.Greens_r[1:7],
-                color=np.linspace(0,255,len(dff_info)),
+                color=np.linspace(0,255,min(50,len(dff_info))),
                 x=dff['Tickers that fit the conditions'].iloc[0][0:50],
                 orientation='v')
     except Exception as e:
@@ -701,4 +701,4 @@ def display_stock_graph4(in_ticker, in_date):
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
  
-    app.run_server(debug=True, host="127.0.0.1", port="8080")  #debug=True
+    app.run_server(host="127.0.0.1", port="8080")  #debug=True
