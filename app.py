@@ -66,9 +66,15 @@ def make_stock_info_table(df):
             elif key[0:2] == '52':
                 tmprow.append(html.Td(f'{item:.2f}', className='tdfixsize'))
             elif key[0:2] == 'Ch' and item >= 0:
-                tmprow.append(html.Td(f'+{item:.2f}', className='tdchangepos'))
+                if key[7:8] == '(':
+                    tmprow.append(html.Td(f'+{item:.2%}', className='tdchangepos'))
+                else:
+                    tmprow.append(html.Td(f'+{item:.2f}', className='tdchangepos'))
             elif key[0:2] == 'Ch' and item < 0:
-                tmprow.append(html.Td(f'{item:.2f}', className='tdchangeneg'))
+                if key[7:8] == '(':
+                    tmprow.append(html.Td(f'{item:.2%}', className='tdchangeneg'))
+                else:
+                    tmprow.append(html.Td(f'{item:.2f}', className='tdchangeneg'))
             else:
                 tmprow.append(html.Td(f'{item:.2f}'))
         tmprow.insert(0, html.Td(str(ind+1)))
